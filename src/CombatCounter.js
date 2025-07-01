@@ -5,14 +5,14 @@ const CombatCounter = () => {
   const [hitsRobotB, setHitsRobotB] = useState(0);
   const [teamNameA, setTeamNameA] = useState('Equipe 1');
   const [teamNameB, setTeamNameB] = useState('Equipe 2');
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(300);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     let interval = null;
     if (isRunning) {
       interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 1);
+        setTime((prevTime) => prevTime - 1);
       }, 1000);
     } else if (!isRunning && time !== 0) {
       clearInterval(interval);
@@ -106,7 +106,7 @@ const styles = {
     margin: '10px',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#3a3f47',
+    backgroundColor: '#2ecc71',
     padding: '30px',
     borderRadius: '10px',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
@@ -117,7 +117,7 @@ const styles = {
     margin: '10px',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#3a3f47',
+    backgroundColor: '#e74c3c',
     padding: '30px',
     borderRadius: '10px',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
@@ -129,7 +129,7 @@ const styles = {
     marginBottom: '20px',
     backgroundColor: 'transparent',
     border: 'none',
-    borderBottom: '2px solid #61dafb',
+    borderBottom: '2px solid white',
     color: 'white',
     textAlign: 'center',
     padding: '5px',
