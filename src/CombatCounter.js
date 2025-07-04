@@ -5,7 +5,7 @@ const CombatCounter = () => {
   const [hitsRobotB, setHitsRobotB] = useState(0);
   const [teamNameA, setTeamNameA] = useState('Equipe 1');
   const [teamNameB, setTeamNameB] = useState('Equipe 2');
-  const [time, setTime] = useState(300);
+  const [time, setTime] = useState(120);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const CombatCounter = () => {
   const resetGame = () => {
     setHitsRobotA(0);
     setHitsRobotB(0);
-    setTime(0);
+    setTime(120);
     setIsRunning(false);
   };
 
