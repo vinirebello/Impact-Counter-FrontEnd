@@ -10,15 +10,39 @@ const CombatCounter = () => {
 
   useEffect(() => {
     let interval = null;
-    if (isRunning) {
+    if (isRunning && time > 0) {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime - 1);
       }, 1000);
-    } else if (!isRunning && time !== 0) {
+    } else if (time === 0) {
       clearInterval(interval);
+      setIsRunning(false)
     }
     return () => clearInterval(interval);
   }, [isRunning, time]);
+
+  useEffect(() => {
+    let pollingInterval = null;
+
+    const fetchScore = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/score');
+        if (response.ok) {
+          const data = await response.json();
+          setHitsRobotA(data.hitsRobotA);
+          setHitsRobotB(data.hitsRobotB);
+        } else {
+          console.error('Falha ao buscar placar:', await response.text());
+        }
+      } catch (error) {
+        console.error('Erro de rede ao buscar placar:', error);
+      }
+    };
+
+    pollingInterval = setInterval(fetchScore, 1000); 
+
+    return () => clearInterval(pollingInterval);
+  }, []);
 
   const formatTime = (totalSeconds) => {
     const minutes = Math.floor(totalSeconds / 60);
@@ -26,9 +50,26 @@ const CombatCounter = () => {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const resetGame = () => {
-    setHitsRobotA(0);
-    setHitsRobotB(0);
+  const resetGame = async () => {
+    // Envia uma requisição para o backend para resetar o placar
+    try {
+      const response = await fetch('http://localhost:3001/api/reset-score', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        console.log('Comando de reset enviado para o backend.');
+        // O próximo polling atualizará o placar no frontend
+      } else {
+        console.error('Falha ao enviar comando de reset:', await response.text());
+      }
+    } catch (error) {
+      console.error('Erro de rede ao resetar o placar:', error);
+    }
+
+    // Reinicia o timer localmente
     setTime(120);
     setIsRunning(false);
   };
